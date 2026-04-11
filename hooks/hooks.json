@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f \"$CLAUDE_PROJECT_DIR/.nrepl-port\" ]; then echo 'Tip: For structural queries (namespace contents, resolver relationships), consider the REPL. For finding call sites or counting references for a refactor, use LSP find_references instead of Grep.'; fi"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"${CLAUDE_TOOL_INPUT:-}\" | grep -qE '\\(atom |\\(volatile! |\\(ref |\\(agent |\\(defonce '; then if ! echo \"$CLAUDE_TOOL_INPUT\" | grep -qi 'APPROVED'; then echo 'WARNING: Mutable state introduced without approval comment. Per clojure-coding-standards, atom/volatile!/ref/agent require explicit user approval. Add a MUTATION APPROVED comment or ask the user.'; fi; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
