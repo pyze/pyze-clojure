@@ -1,6 +1,6 @@
 ---
 name: repl-semantic-search
-description: Use REPL introspection as semantic search over Clojure codebases. Use when searching for resolver relationships, attribute provenance, namespace structure, or function signatures — before falling back to Grep.
+description: "This skill should be used when searching Clojure codebases via REPL introspection, finding resolver relationships, checking attribute provenance, or exploring namespace structure before falling back to Grep."
 ---
 
 # REPL Semantic Search

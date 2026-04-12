@@ -1,6 +1,6 @@
 ---
 name: testing-patterns-clojure
-description: "Clojure testing anti-patterns with clojure.test code examples: #' var access, with-redefs, config divergence"
+description: "This skill should be used when writing or reviewing clojure.test tests, debugging test/production divergence, or auditing for anti-patterns like var quoting, with-redefs misuse, or config divergence."
 ---
 
 Clojure companion to the testing-patterns skill (in pyze-workflow). This skill provides Clojure-specific code examples for each anti-pattern using `clojure.test`.

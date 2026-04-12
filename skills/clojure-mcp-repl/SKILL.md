@@ -1,6 +1,6 @@
 ---
 name: clojure-mcp-repl
-description: Execute Clojure/ClojureScript code at the REPL using clojure-mcp (MCP server). Use when evaluating expressions, starting/stopping the backend, querying state, or running tests interactively.
+description: "This skill should be used when evaluating Clojure expressions at the REPL via clojure-mcp, starting/stopping the backend, querying runtime state, or running tests interactively."
 ---
 
 # clojure-mcp REPL Skill

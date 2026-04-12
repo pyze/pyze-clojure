@@ -1,6 +1,6 @@
 ---
 name: rewrite-clj-transforms
-description: Structural Clojure code modification via bb + rewrite-clj. Use instead of sed/Edit for s-expression-aware transforms — ns require manipulation, defn transforms, EDN config updates, bulk keyword renames. Prefer clojure-lsp for single-symbol rename/find.
+description: "This skill should be used when performing structural Clojure code modifications via bb + rewrite-clj, manipulating ns requires, transforming defn forms, updating EDN configs, or doing bulk keyword renames."
 ---
 
 # rewrite-clj Transforms

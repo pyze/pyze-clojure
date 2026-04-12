@@ -1,6 +1,6 @@
 ---
 name: wemble-gemini
-description: Use when using Wemble's Gemini integration - client lifecycle, chat-turn, ask/ask-json/ask-text, tool data maps, context caching, ->schema DSL, and schema compatibility validation
+description: "This skill should be used when using Wemble's Gemini integration, working with chat-turn, ask/ask-json/ask-text, tool data maps, context caching, or the ->schema DSL."
 ---
 
 # Wemble Gemini Integration

@@ -1,6 +1,6 @@
 ---
 name: reitit-routing
-description: Configure server and client routing with Reitit. Use when adding routes, implementing navigation, or handling browser history.
+description: "This skill should be used when configuring Reitit routes for server or client, adding new routes, implementing navigation, or handling browser history."
 ---
 
 # Reitit Routing Skill

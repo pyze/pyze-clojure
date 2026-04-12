@@ -1,6 +1,6 @@
 ---
 name: pathom3-eql
-description: Build EQL resolvers with Pathom 3 for data resolution. Use when adding resolvers, writing EQL queries, handling Pathom errors, configuring the Pathom graph, or working with ident-based data access.
+description: "This skill should be used when building Pathom 3 EQL resolvers, writing EQL queries, handling Pathom errors, configuring the resolver graph, or working with ident-based data access."
 ---
 
 # Pathom 3 / EQL

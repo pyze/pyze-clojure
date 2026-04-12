@@ -1,6 +1,6 @@
 ---
 name: error-handling-clojure
-description: "Clojure error handling with Truss assertions, Telemere structured logging, ex-info, and Integrant configuration patterns"
+description: "This skill should be used when implementing error handling in Clojure with Truss assertions, Telemere structured logging, ex-info exceptions, or debugging Integrant configuration issues."
 ---
 
 Clojure companion to the error-handling-patterns skill (in pyze-workflow). This skill provides Clojure-specific implementation using Truss, Telemere, and Integrant.

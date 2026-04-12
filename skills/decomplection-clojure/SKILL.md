@@ -1,6 +1,6 @@
 ---
 name: decomplection-clojure
-description: "Clojure code examples for decomplection principles: composition, protocols, state management approval workflow"
+description: "This skill should be used when applying decomplection principles in Clojure, using comp/protocols/records for composition, or following the mutable state approval workflow for atom/volatile/ref/agent."
 ---
 
 Clojure companion to the decomplection-first-design skill (in pyze-workflow). This skill provides Clojure-specific code examples for the general principles.

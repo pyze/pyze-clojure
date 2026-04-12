@@ -1,6 +1,6 @@
 ---
 name: replicant-ui
-description: Build UI components with Replicant vDOM and hiccup syntax. Use when creating views, rendering components, handling UI events, adding pages, or debugging event handler wrapping.
+description: "This skill should be used when building Replicant UI components with vDOM and hiccup syntax, creating views, rendering components, handling UI events, or debugging event handler wrapping."
 ---
 
 # Replicant UI

@@ -1,6 +1,6 @@
 ---
 name: caching-and-purity-clojure
-description: "Clojure caching examples: impure vs pure function patterns, memoize correctness"
+description: "This skill should be used when using memoize in Clojure, diagnosing stale cache results from impure functions, or evaluating whether a Clojure function is pure enough to cache."
 ---
 
 Clojure companion to the caching-and-purity skill (in pyze-workflow). This skill provides Clojure-specific code examples for reasoning about caching and referential transparency.

@@ -1,6 +1,6 @@
 ---
 name: tool-selection-clojure
-description: "Clojure tool selection: clojure-lsp operations, REPL queries, namespace navigation"
+description: "This skill should be used when choosing between clojure-lsp, REPL, and grep for Clojure code navigation, or when navigating namespaces and finding references in Clojure projects."
 ---
 
 Clojure companion to the tool-selection skill (in pyze-workflow). This skill provides Clojure-specific tool usage, operations, and decision guidance.

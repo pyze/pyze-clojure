@@ -1,6 +1,6 @@
 ---
 name: clojurescript-cross-platform-code
-description: Write cross-platform ClojureScript code for JVM TDD. Use when deciding file extensions, using reader conditionals, or enabling JVM testing.
+description: "This skill should be used when writing cross-platform ClojureScript code, deciding between .clj/.cljs/.cljc file extensions, using reader conditionals, or enabling JVM-based testing."
 ---
 
 # ClojureScript Cross-Platform Code

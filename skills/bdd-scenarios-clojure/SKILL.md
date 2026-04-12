@@ -1,6 +1,6 @@
 ---
 name: bdd-scenarios-clojure
-description: "BDD scenarios in clojure.test: Given/When/Then with deftest, testing blocks, and Clojure predicates"
+description: "This skill should be used when writing BDD scenarios with clojure.test, structuring tests as Given/When/Then using deftest and testing blocks, or using Clojure predicates for assertions."
 ---
 
 Clojure companion to the bdd-scenarios skill (in pyze-workflow). This skill provides Clojure-specific implementation of Given/When/Then scenarios using `clojure.test`.

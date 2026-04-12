@@ -1,6 +1,6 @@
 ---
 name: nucleus-notation
-description: Encode behavioral directives and data models using mathematical symbols for compressed AI prompts. Use when creating Gemini prompts with data model context (DM:[...] notation) or defining compressed workflow constraints.
+description: "This skill should be used when encoding behavioral directives with mathematical symbols for compressed AI prompts, using DM:[...] notation, or defining compressed workflow constraints."
 ---
 
 # Nucleus Mathematical Prompting

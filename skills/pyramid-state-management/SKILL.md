@@ -1,6 +1,6 @@
 ---
 name: pyramid-state-management
-description: Manage normalized state with Pyramid. Use when adding/modifying entities, querying state, understanding entity identity and normalization, or writing tests with store operations.
+description: "This skill should be used when managing normalized state with Pyramid, adding or modifying entities, querying state, or writing tests with store operations."
 ---
 
 # Pyramid State Management

@@ -1,6 +1,6 @@
 ---
 name: gemini-sdk-clojure
-description: Use when writing Clojure code that calls the Google Gemini Java SDK (com.google.genai), adding function declarations, building schemas, handling function calls, or debugging varargs interop errors
+description: "This skill should be used when calling the Google Gemini Java SDK from Clojure, adding function declarations, building schemas, handling function calls, or debugging varargs interop errors."
 ---
 
 # Google Gemini Java SDK from Clojure

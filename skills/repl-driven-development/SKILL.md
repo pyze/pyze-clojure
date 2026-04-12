@@ -1,6 +1,6 @@
 ---
 name: repl-driven-development
-description: TDD and REPL-driven development workflow. Use when writing tests first (test-driven development), building features incrementally, testing assumptions at the REPL, or planning test-before-implementation work.
+description: "This skill should be used when following TDD or REPL-driven development in Clojure, writing tests before implementation, building features incrementally at the REPL, or planning test-first work."
 ---
 
 # REPL-Driven Development

@@ -1,6 +1,6 @@
 ---
 name: continuous-eql
-description: "Continuous EQL — Missionary Signal Graph Architecture. Use when working with reactive pipelines, MissionaryTask/Flow, signal graphs, or debugging reactive data resolution."
+description: "This skill should be used when working with Continuous EQL, Missionary signal graphs, reactive pipelines with MissionaryTask/Flow, or debugging reactive data resolution."
 ---
 
 # Continuous EQL — Missionary Signal Graph Architecture

@@ -1,6 +1,6 @@
 ---
 name: integrant-lifecycle
-description: Manage system lifecycle with Integrant dependency injection. Use when adding backend services, configuring system.edn, or understanding service naming.
+description: "This skill should be used when adding backend services with Integrant, configuring system.edn, writing init-key/halt-key! methods, or understanding Integrant service naming conventions."
 ---
 
 # Integrant Lifecycle

@@ -1,6 +1,6 @@
 ---
 name: clojure-coding-standards
-description: Comprehensive Clojure code quality standards including functional programming principles, code organization guidelines, and collection transformation patterns - use for writing maintainable, testable, and performant Clojure code. Also covers immutability, pure functions, bang suffix conventions, state-based coordination, transducers, function/namespace size limits, and refactoring triggers.
+description: "This skill should be used when writing Clojure code and checking coding standards, reviewing function/namespace size, or applying functional programming principles like immutability, pure functions, and transducers."
 version: 2.0.0
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: clojurescript-shadow-cljs
-description: Build ClojureScript with Shadow-CLJS compilation and hot reload. Use when debugging build issues, configuring compilation, or understanding the build system.
+description: "This skill should be used when configuring Shadow-CLJS builds, debugging ClojureScript compilation issues, or understanding hot reload and the build system."
 ---
 
 # ClojureScript & Shadow-CLJS
