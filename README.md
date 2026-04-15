@@ -85,6 +85,20 @@ When both pyze-workflow and pyze-clojure are installed, run both for full covera
 - `/pyze-workflow:code-cleanup` — principle-driven analysis + Chiasmus graph analysis
 - `/pyze-clojure:code-cleanup` — clj-kondo + Clojure-specific skill registry
 
+## MCP Servers
+
+### clojure-mcp
+
+[clojure-mcp](https://github.com/bhauman/clojure-mcp) provides `clojure_eval` — direct REPL evaluation from Claude Code. The plugin registers it automatically via `.mcp.json`.
+
+**Prerequisite:** Install the tool alias (one-time):
+
+```bash
+clojure -Ttools install-latest :lib io.github.bhauman/clojure-mcp :as mcp
+```
+
+The server connects to the nREPL port discovered from `.nrepl-port`. Start your project's nREPL first, then `clojure_eval` becomes available.
+
 ## Hooks
 
 - **nREPL hint** — when a `.nrepl-port` file exists, suggests using REPL over grep for structural queries

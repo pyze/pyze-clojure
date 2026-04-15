@@ -20,12 +20,35 @@ This skill covers: **clojure-mcp tool mechanics** - syntax, connection, commands
 - TDD methodology → `superpowers:test-driven-development`
 - System lifecycle details → [integrant-lifecycle](../integrant-lifecycle/)
 
-## Installation
+## Setup
+
+### 1. Install the tool alias (one-time)
 
 ```bash
 # Requires: Clojure 1.12+
 clojure -Ttools install-latest :lib io.github.bhauman/clojure-mcp :as mcp
 ```
+
+### 2. MCP server configuration
+
+The pyze-clojure plugin ships a `.mcp.json` that registers `clojure-mcp` as an MCP server automatically. No manual configuration needed — `clojure_eval` becomes available when the tool alias is installed and a project has a running nREPL (`.nrepl-port` file present).
+
+The server runs `clojure -Tmcp start` and connects to the nREPL port discovered from `.nrepl-port`.
+
+For the `:cli-assist` profile (optimized for Claude Code — disables file editing since Claude handles that natively), add to your project's `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "clojure-mcp": {
+      "command": "clojure",
+      "args": ["-Tmcp", "start", ":config-profile", ":cli-assist"]
+    }
+  }
+}
+```
+
+**Do not add clojure-mcp to global `~/.claude/settings.json`** — it's project-specific (needs an nREPL in the project directory).
 
 ---
 
