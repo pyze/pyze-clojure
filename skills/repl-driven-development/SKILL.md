@@ -100,6 +100,12 @@ See [integrant-lifecycle](../integrant-lifecycle/) for full details. Key command
 | Changed protocol/defrecord | `(reset-all)` |
 | Added new dependency | Restart JVM |
 
+### Verification as done criterion
+
+REPL green = done. Unvalidated = not done. After touching server-side Clojure files (`.clj`) or EDN resources, run `(reset)` and verify the changed code compiles and behaves correctly before declaring the task complete.
+
+This applies to both main sessions and dispatched agents. An agent that implements changes but skips `(reset)` has not completed its task. Do not defer REPL validation to a separate step or session — it costs seconds and prevents breakage from compounding across sessions.
+
 ---
 
 ## Design for REPL-Friendly Systems
