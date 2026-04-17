@@ -85,20 +85,27 @@ clojure_eval: (do
 
 ## nREPL Connection
 
-### Automatic Connection (Recommended)
+### Automatic Port Discovery
 
-clojure-mcp connects to existing nREPL if `.nrepl-port` file exists:
+clojure-mcp has built-in port discovery that goes beyond just reading a file. It uses the `list_nrepl_ports` tool which:
+
+1. **Reads `.nrepl-port`** file in the project directory
+2. **Scans running processes** via `lsof` to find Java/Clojure/Babashka processes listening on TCP ports
+3. **Probes each candidate** to verify it's actually an nREPL server
+4. **Detects shadow-cljs** vs plain Clojure automatically
+
+In most cases, just start your nREPL and `clojure_eval` will find it. No manual `.nrepl-port` file needed if the JVM process is visible to `lsof`.
+
+For shadow-cljs projects where the nREPL port file is in a non-standard location:
 
 ```bash
 # Copy shadow-cljs's dynamic nREPL port (NOT hardcoded!)
 cp .shadow-cljs/nrepl.port .nrepl-port
 ```
 
-Then use `clojure_eval` as normal. It automatically discovers the port from `.nrepl-port`.
-
 ### Manual Port Selection
 
-The `clojure_eval` tool accepts an optional `port` parameter:
+The `clojure_eval` tool accepts an optional `port` parameter for targeting a specific nREPL server (e.g., when multiple are running):
 
 ```clojure
 clojure_eval (port: 7888): (+ 1 2)
