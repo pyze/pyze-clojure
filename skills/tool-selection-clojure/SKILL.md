@@ -1,6 +1,6 @@
 ---
 name: tool-selection-clojure
-description: "This skill should be used when choosing between clojure-lsp, REPL, and grep for Clojure code navigation, or when navigating namespaces and finding references in Clojure projects."
+description: "This skill should be used when choosing between clj-surgeon, clojure-lsp, REPL, and grep for Clojure code navigation, or when navigating namespaces and finding references in Clojure projects."
 ---
 
 Clojure companion to the tool-selection skill (in pyze-workflow). This skill provides Clojure-specific tool usage, operations, and decision guidance.
@@ -8,14 +8,36 @@ Clojure companion to the tool-selection skill (in pyze-workflow). This skill pro
 ## Clojure Tool Hierarchy
 
 ```
-clojure-lsp (cclsp) > REPL (clojure_eval / clojure-mcp) > Grep/Glob
+clj-surgeon > clojure-lsp (cclsp) > REPL (clojure_eval / clojure-mcp) > Grep/Glob
 ```
+
+---
+
+## clj-surgeon (babashka CLI)
+
+Use for anything about **namespace-level structure and refactoring**:
+
+| Task | Command |
+|------|---------|
+| What's in this namespace? | `clj-surgeon :op :ls :file <path>` |
+| What does this form depend on? | `clj-surgeon :op :ls-deps :file <path> :form <name>` |
+| What's the minimal extraction unit? | `clj-surgeon :op :ls-extract :file <path> :form <name>` |
+| Split a large namespace | `clj-surgeon :op :extract! :file <path> :forms '[...]' :to <new-path>` |
+| Reorder forms in a file | `clj-surgeon :op :mv :file <path> :form <name> :before <other>` |
+| Fix forward declarations | `clj-surgeon :op :fix-declares! :file <path>` |
+| Rename a namespace prefix | `clj-surgeon :op :rename-ns! :from <old> :to <new> :root .` |
+| Topological sort | `clj-surgeon :op :topo :file <path>` |
+| Intra-namespace call graph | `clj-surgeon :op :deps :file <path> :form <name>` |
+
+**Why not LSP?** LSP requires iterative round-trips to build a namespace picture. clj-surgeon returns a complete structural outline in one call (~50 tokens vs 2000+). LSP doesn't support extraction, declare-fixing, or form reordering.
+
+**Proactive rule:** Before reading any `.clj` file over 500 lines, run `:ls` first.
 
 ---
 
 ## clojure-lsp / cclsp Operations
 
-Use for anything about **code structure and relationships**:
+Use for anything about **cross-namespace symbol relationships**:
 
 | Task | LSP method |
 |------|-----------|
@@ -24,7 +46,6 @@ Use for anything about **code structure and relationships**:
 | Is this code dead? | `find_references` -- 0 results = dead |
 | Where is this defined? | `goto_definition` |
 | Rename a symbol safely | `rename` |
-| What does this namespace export? | `document_symbols` |
 
 ### Why LSP Over Grep for Clojure
 
@@ -80,10 +101,27 @@ Use for anything about **runtime behavior and data**:
 
 ---
 
+## bb + rewrite-clj
+
+Use for **fine-grained structural transforms** that clj-surgeon doesn't cover:
+
+| Task | Approach |
+|------|----------|
+| Rename keywords across files | bb + rewrite-clj script |
+| Update EDN config values | bb + rewrite-clj script |
+| Add/remove ns :require entries | bb + rewrite-clj script |
+
+See `rewrite-clj-transforms` skill for recipes.
+
+---
+
 ## Clojure-Specific Decision Tree
 
 ```
 What are you trying to find out?
+|
++-- Namespace structure (what forms exist, dependencies, extraction units?)
+|   +-- Use clj-surgeon
 |
 +-- Who calls this function / is this dead code?
 |   +-- Use clojure-lsp find_references
@@ -100,6 +138,9 @@ What are you trying to find out?
 +-- What's in the running system?
 |   +-- Use REPL: (keys @user/system)
 |
++-- Fine-grained code transform (keyword rename, EDN update, require manipulation?)
+|   +-- Use bb + rewrite-clj
+|
 +-- Find a specific string / error message / TODO?
 |   +-- Use Grep
 |
@@ -107,12 +148,19 @@ What are you trying to find out?
 |   +-- Use Glob
 |
 +-- Not sure?
-    +-- Try clojure-lsp first, REPL second, grep last
+    +-- Try clj-surgeon first, then clojure-lsp, then REPL, grep last
 ```
 
 ---
 
 ## Common Mistakes in Clojure
+
+### Using LSP for namespace overview
+
+```
+BAD:  LSP document_symbols      -- multiple round-trips, high token cost
+GOOD: clj-surgeon :op :ls       -- complete outline in one call
+```
 
 ### Using grep to find references
 
@@ -137,13 +185,15 @@ GOOD: (pci/register [...]) at the REPL -- see the actual env map
 
 ### Defaulting to grep because it's familiar
 
-Grep is always available and always works -- that makes it the *easy* choice (nearby, familiar). But clojure-lsp and REPL are the *simple* choice -- they give you the right answer with less interleaving of irrelevant results.
+Grep is always available and always works -- that makes it the *easy* choice (nearby, familiar). But clj-surgeon, clojure-lsp, and REPL are the *simple* choice -- they give you the right answer with less interleaving of irrelevant results.
 
 ---
 
 ## Summary
 
-1. **clojure-lsp for structure** -- references, definitions, renames, dead code; understands aliases
-2. **REPL for behavior** -- data shapes, system state, resolver exploration, live validation
-3. **Grep for text** -- literal patterns, error messages, non-code files
-4. **Never grep for Clojure references** -- use clojure-lsp; grep misses aliases and catches false positives
+1. **clj-surgeon for namespace structure** -- outline, deps, extract, fix-declares, rename-ns
+2. **clojure-lsp for cross-namespace relationships** -- references, definitions, renames, dead code; understands aliases
+3. **REPL for behavior** -- data shapes, system state, resolver exploration, live validation
+4. **rewrite-clj for fine-grained transforms** -- keyword rename, EDN config, require manipulation
+5. **Grep for text** -- literal patterns, error messages, non-code files
+6. **Never grep for Clojure references** -- use clojure-lsp; grep misses aliases and catches false positives

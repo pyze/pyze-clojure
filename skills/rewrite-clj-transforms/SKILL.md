@@ -1,11 +1,11 @@
 ---
 name: rewrite-clj-transforms
-description: "This skill should be used when performing structural Clojure code modifications via bb + rewrite-clj, manipulating ns requires, transforming defn forms, updating EDN configs, or doing bulk keyword renames."
+description: "This skill should be used when performing fine-grained structural Clojure code modifications via bb + rewrite-clj: keyword rename across files, EDN config updates, ns require manipulation. For namespace-level ops (outline, extract, deps), use clj-surgeon."
 ---
 
 # rewrite-clj Transforms
 
-Structural code modification for Clojure and EDN files via Babashka + rewrite-clj.
+Fine-grained structural code modification for Clojure and EDN files via Babashka + rewrite-clj.
 
 **rewrite-clj** parses Clojure into a zipper that preserves whitespace, comments, and formatting. It operates on s-expressions, not lines — eliminating the class of bugs where sed/awk corrupt bracket nesting.
 
@@ -18,16 +18,16 @@ Structural code modification for Clojure and EDN files via Babashka + rewrite-cl
 ```
 Need to modify Clojure/EDN code?
     │
+    ├─ Namespace-level ops (outline, extract, deps, declares) → clj-surgeon
+    │
     ├─ Single symbol rename → clojure-lsp (rename_symbol)
     │
     ├─ Find all callers → clojure-lsp (find_references)
     │
-    ├─ Structural transform across files → bb + rewrite-clj
+    ├─ Fine-grained structural transform → bb + rewrite-clj (this skill)
     │   ├─ ns :require manipulation
-    │   ├─ defn signature changes
     │   ├─ Bulk keyword renames
-    │   ├─ EDN config updates
-    │   └─ Custom code mods
+    │   └─ EDN config updates
     │
     ├─ One-off small edit, known location → Edit tool (pragmatic)
     │
@@ -145,119 +145,8 @@ Need to modify Clojure/EDN code?
 ;; (update-edn! "resources/config.edn" [:server :port] 8080)
 ```
 
-### 4. Find and list all defns in a namespace
-
-```clojure
-#!/usr/bin/env bb
-(require '[rewrite-clj.zip :as z])
-
-(defn list-defns [file-path]
-  (loop [loc (z/of-file file-path)
-         results []]
-    (if (z/end? loc)
-      results
-      (recur (z/next loc)
-             (if (and (z/list? loc)
-                      (#{'defn 'defn- 'defmethod}
-                       (z/sexpr (z/down loc))))
-               (conj results {:name (z/sexpr (z/right (z/down loc)))
-                              :line (-> loc z/node meta :row)})
-               results)))))
-
-;; Usage:
-;; (list-defns "src/my/ns.clj")
-;; => [{:name foo :line 5} {:name bar :line 20}]
-```
-
-### 5. Remove a function definition
-
-```clojure
-#!/usr/bin/env bb
-(require '[rewrite-clj.zip :as z])
-
-(defn remove-defn! [file-path fn-name]
-  (let [zloc (z/of-file file-path)]
-    (loop [loc zloc]
-      (if (z/end? loc)
-        (do (spit file-path (z/root-string loc))
-            (println "Removed" fn-name "from" file-path))
-        (recur (z/next
-                (if (and (z/list? loc)
-                         (#{'defn 'defn-} (z/sexpr (z/down loc)))
-                         (= fn-name (z/sexpr (z/right (z/down loc)))))
-                  (z/remove loc)
-                  loc)))))))
-```
-
-### 6. Batch transform: add missing `!` suffix
-
-```clojure
-#!/usr/bin/env bb
-(require '[rewrite-clj.zip :as z]
-         '[babashka.fs :as fs]
-         '[clojure.string :as str])
-
-(def side-effect-fns #{"swap!" "reset!" "send" "send-off" "vswap!" "vreset!"
-                        "spit" "println" "prn"})
-
-(defn defn-has-side-effects? [zloc]
-  (let [body (z/string zloc)]
-    (some #(str/includes? body %) side-effect-fns)))
-
-(defn defn-name-needs-bang? [zloc]
-  (let [name-loc (z/right (z/down zloc))
-        name-str (str (z/sexpr name-loc))]
-    (and (defn-has-side-effects? zloc)
-         (not (str/ends-with? name-str "!"))
-         ;; Skip -main and test functions
-         (not (str/starts-with? name-str "-"))
-         (not (str/ends-with? name-str "-test")))))
-
-;; Walk files, find defns needing !, report (don't auto-rename — use LSP for that)
-```
-
----
-
-## Integration with clojure-lsp
-
-rewrite-clj and clojure-lsp are complementary:
-
-| Operation | Tool | Why |
-|-----------|------|-----|
-| Rename a function | clojure-lsp `rename_symbol` | Updates all callers, AST-aware |
-| Check if function is used | clojure-lsp `find_references` | Reliable cross-file search |
-| Add/remove ns requires | bb + rewrite-clj | LSP doesn't expose this |
-| Bulk keyword rename | bb + rewrite-clj | LSP is one-at-a-time |
-| EDN config changes | bb + rewrite-clj | LSP doesn't handle EDN |
-| Custom code mods | bb + rewrite-clj | Programmatic, any transform |
-
-**Workflow for refactoring:**
-1. Use `find_references` to understand impact
-2. Use `rename_symbol` for symbol renames
-3. Use bb + rewrite-clj for structural transforms LSP can't do
-4. Run `get_diagnostics` to verify no issues introduced
-
----
-
-## Integration with /code-cleanup
-
-Agents can produce bb fix scripts alongside their findings:
-
-```
-Agent output:
-  findings: [{:file "src/viz/chart.clj" :line 42 :violation "scattered-default"}]
-  fix-script: |
-    #!/usr/bin/env bb
-    (require '[rewrite-clj.zip :as z])
-    ;; Extract defaults from inner functions to edge...
-```
-
-The orchestrator presents both findings AND the fix script for user approval before running.
-
----
-
 ## Related Skills
 
-- [babashka](../babashka/) — bb scripting basics, project structure
+- [clj-surgeon](../clj-surgeon/) — namespace-level structural ops (outline, extract, deps, declares)
 - [clojure-coding-standards](../clojure-coding-standards/) — the standards these transforms enforce
-- [repl-semantic-search](../repl-semantic-search/) — REPL for searching, rewrite-clj for transforming
+- [tool-selection-clojure](../tool-selection-clojure/) — full decision tree for choosing the right tool
