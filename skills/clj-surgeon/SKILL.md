@@ -1,6 +1,6 @@
 ---
 name: clj-surgeon
-description: "Use before reading any large Clojure file and when exploring namespace structure or refactoring namespaces. Preferred over LSP and grep for code exploration. LSP remains the tool for cross-namespace rename and find-references."
+description: "This skill should be used before reading any large Clojure file and when exploring namespace structure or refactoring namespaces. Preferred over LSP and grep for code exploration. LSP remains the tool for cross-namespace rename and find-references."
 ---
 
 # clj-surgeon: Structural Operations on Clojure Namespaces
