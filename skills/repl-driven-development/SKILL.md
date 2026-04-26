@@ -1,11 +1,11 @@
 ---
 name: repl-driven-development
-description: "This skill should be used when following TDD or REPL-driven development in Clojure, writing tests before implementation, building features incrementally at the REPL, or planning test-first work."
+description: "Use when writing, modifying, or debugging any Clojure code. Establishes the default development loop: evaluate each function at the REPL immediately after writing it, never batch-implement and validate at the end."
 ---
 
 # REPL-Driven Development
 
-Build incrementally with immediate feedback. REPL for exploration, TDD for implementation.
+Build incrementally with immediate feedback. REPL for exploration and verification, spec-driven testing for implementation.
 
 **REPL exploration is safe during any PDCA phase** — it never changes production code. Use it freely to validate assumptions, discover data shapes, and test ideas before writing code.
 
@@ -14,19 +14,18 @@ Build incrementally with immediate feedback. REPL for exploration, TDD for imple
 ## Core Principle
 
 ```
-Explore at REPL → Write failing test → Implement → Refactor
+Explore at REPL → Implement → Verify at REPL → Write tests tracing to obligations
 ```
 
 **REPL exploration**: Understand existing code, discover data shapes, experiment with approaches, debug live state.
 
-**TDD implementation**: Write failing test first, then minimal code to pass.
+**Spec-driven implementation**: For features, implement to satisfy spec obligations, then write tests tracing to each `allium:propagate` obligation. For bug fixes, write the failing test first (TDD), then implement the minimal fix.
 
 ```clojure
-;; TDD at the REPL
-(deftest test-my-fn (is (= 42 (my-fn 21))))
-(test-my-fn)    ; See it FAIL
+;; Verify at the REPL immediately after implementing
 (defn my-fn [x] (* x 2))
-(test-my-fn)    ; See it PASS
+(my-fn 21)   ; => 42 — verify before moving on
+(my-fn 0)    ; => 0 — check edge cases
 ```
 
 ---
@@ -35,7 +34,7 @@ Explore at REPL → Write failing test → Implement → Refactor
 
 **Use DIFFERENT skill if:**
 - clojure_eval MCP tool mechanics → [clojure-mcp-repl](../clojure-mcp-repl/)
-- TDD workflow details → `superpowers:test-driven-development`
+- Bug fix TDD workflow → `superpowers:test-driven-development`
 - REPL as search tool → [repl-semantic-search](../repl-semantic-search/)
 
 ---
@@ -45,7 +44,7 @@ Explore at REPL → Write failing test → Implement → Refactor
 Most development follows this cycle:
 
 1. **Explore** — Load namespaces, examine data shapes, test assumptions at REPL
-2. **Develop** — Write failing test → minimal implementation → refactor
+2. **Develop** — Implement → verify at REPL → write tests tracing to spec obligations
 3. **Test** — Run JVM tests for the affected namespace
 4. **Verify** — Browser validation (if UI), run full test suite
 5. **Lint** — clj-kondo, fix warnings
